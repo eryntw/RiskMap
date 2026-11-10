@@ -1,0 +1,36 @@
+################################
+# current project
+RiskMap:
+  extent:
+    extent_vector: "aus_imcra_prov_dissolve"
+    extent_filt_col: NULL
+    extent_filt_level: NULL
+    extent_buffer: 0
+    extent_time: "P50Y"
+    region_taxa: "sa_br_dissolve"
+  grain:
+    res_x: 30
+    res_y: 30
+    grain_time: "P1Y"
+    taxonomic: 
+      - species
+      - subspecies
+    
+# Other project (scale the same as the above unless specified)
+RecExtract:
+  grain:
+    taxonomic: "subspecies"
+    
+Exposure:
+  match: TRUE
+  
+Pressure:
+  match: TRUE
+    
+envPIA:
+  aoi:
+    aoi_vector: "pia"
+    aoi_filt_col: "boundary"
+    aoi_filt_level: 1
+    vec_buffer: 0
+    aoi_buffer: 50000

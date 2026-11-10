@@ -1,0 +1,41 @@
+# Base coin inputs for each species group (objects read at the top of coin_build.R)
+inputs:
+  animal: coin_a
+  plant:  coin_p
+
+normalisation:
+  f_n: n_minmax
+  range: [1, 100]          # above 0 so geometric means work
+
+# One f_ag per aggregation level (bottom up), or a single value for all levels.
+# The vector length must equal (number of levels - 1) for that group's tree.
+aggregation:
+  animal:
+    f_ag: a_gmean
+    dat_thresh: 0.5
+  plant:
+    f_ag: a_gmean
+    dat_thresh: 0.5
+
+scenarios:
+  wind:
+    animal:
+      drop: [pv, pollution]
+      weights: {habconvert: 2, turbine: 2} # other stays 1
+    plant:
+      drop: [pollution]
+      weights: {}
+  solar:
+    animal:
+      drop: [turbine, pollution]
+      weights: {vegclear: 2, fragment: 2}
+    plant:
+      drop: [pollution]
+      weights: {}
+  mine:
+    animal:
+      drop: [pv, turbine, habconvert]
+      weights: {vegclear: 2, pollution:2}
+    plant:
+      drop: []
+      weights: {vegclear: 2, iasplant: 2}

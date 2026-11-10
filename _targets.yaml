@@ -1,0 +1,64 @@
+coin_prep:
+  script: ../RiskMap/010_coin_prep.R
+  store: ../../out/RiskMap/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/coin_prep
+coin_build:
+  script: ../RiskMap/020_coin_build.R
+  store: ../../out/RiskMap/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/coin_build
+RecExtract:
+  RecExtr:
+    script: ../RecExtract/010_RecExtr.R
+    store: ../../out/RecExtract/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__subspecies/RecExtr
+envPIA:
+  setup:
+    script: ../envPIA/010_setup.R
+    store: ../../out/envPIA/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/pia__boundary__1__0__50000/setup
+  clean:
+    script: ../envPIA/020_clean.R
+    store: ../../out/envPIA/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/pia__boundary__1__0__50000/clean
+  aoi_taxa:
+    script: ../envPIA/030_aoi_taxa.R
+    store: ../../out/envPIA/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/pia__boundary__1__0__50000/aoi_taxa
+  concern:
+    script: ../envPIA/040_concern.R
+    store: ../../out/envPIA/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/pia__boundary__1__0__50000/concern
+  final:
+    script: ../envPIA/050_final.R
+    store: ../../out/envPIA/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/pia__boundary__1__0__50000/final
+  summarise:
+    script: ../envPIA/060_summarise.R
+    store: ../../out/envPIA/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/pia__boundary__1__0__50000/summarise
+  report_prep:
+    script: ../envPIA/070_report_prep.R
+    store: ../../out/envPIA/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/pia__boundary__1__0__50000/report_prep
+  report:
+    script: ../envPIA/080_report.R
+    store: ../../out/envPIA/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/pia__boundary__1__0__50000/report
+  release:
+    script: ../envPIA/090_release.R
+    store: ../../out/envPIA/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/pia__boundary__1__0__50000/release
+Pressure:
+  setup:
+    script: ../Pressure/010_setup.R
+    store: ../../out/Pressure/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/setup
+  iucn:
+    script: ../Pressure/020_iucn.R
+    store: ../../out/Pressure/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/iucn
+  sdmstats:
+    script: ../Pressure/030_sdmstats.R
+    store: ../../out/Pressure/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/sdmstats
+  regcont:
+    script: ../Pressure/040_regcont.R
+    store: ../../out/Pressure/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/regcont
+Exposure:
+  setup:
+    script: ../Exposure/010_setup.R
+    store: ../../out/Exposure/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/setup
+  plants:
+    script: ../Exposure/020_plants.R
+    store: ../../out/Exposure/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/plants
+  animaldb:
+    script: ../Exposure/030_animaldb.R
+    store: ../../out/Exposure/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/animaldb
+  animals:
+    script: ../Exposure/040_animals.R
+    store: ../../out/Exposure/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/animals
