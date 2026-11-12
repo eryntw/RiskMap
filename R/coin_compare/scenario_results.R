@@ -4,7 +4,8 @@
 # coin_agg: aggregated coin; inputs: the scenario's inputs list (for the
 # stressor codes under `driver_parent`).
 scenario_results <- function(coin_agg, inputs, scenario, group,
-                             top = "vuln", driver_parent = "exposure") {
+                             top = "vuln", driver_parent = "exposure",
+                             variant = "baseline") {
   
   get_tab <- \(use) COINr::get_results(
     coin_agg, dset = "Aggregated", tab_type = "Aggs",
@@ -43,7 +44,8 @@ scenario_results <- function(coin_agg, inputs, scenario, group,
     dplyr::left_join(ranks, by = "uCode") |>
     dplyr::left_join(completeness, by = "uCode") |>
     dplyr::mutate(top_driver = top_driver) |>
-    dplyr::mutate(group = group, scenario = scenario, .before = 1) |>
+    dplyr::mutate(group = group, scenario = scenario,
+                  variant = variant, .before = 1) |>
     dplyr::arrange(.data[[paste0("rank_", top)]])
 }
 

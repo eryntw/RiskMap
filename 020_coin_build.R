@@ -43,16 +43,29 @@ mapped <- tar_map(
 tar_plan(
   mapped,
   
-  # row-bind each group's scenario tables (order follows the rows of `grid`)
-  tar_combine(results_animal, mapped[["results"]][grid$group == "animal"],
+  # all scenarios and variants for each species group
+  tar_combine(results_all_animal, mapped[["results"]][grid$group == "animal"],
               command = dplyr::bind_rows(!!!.x)),
-  tar_combine(results_plant,  mapped[["results"]][grid$group == "plant"],
+  tar_combine(results_all_plant,  mapped[["results"]][grid$group == "plant"],
               command = dplyr::bind_rows(!!!.x)),
   
-  tar_target(compare_animal, compare_scenarios(results_animal)),
-  tar_target(compare_plant,  compare_scenarios(results_plant))
+  # scenario comparison uses the baseline rows only
+  tar_target(compare_animal,
+             compare_scenarios(dplyr::filter(results_all_animal, 
+                                             variant == "baseline"))),
+  tar_target(compare_plant,
+             compare_scenarios(dplyr::filter(results_all_plant, 
+                                             variant == "baseline"))),
+  
+  ## This will build around 500 targets. Wait for the storage arrive.
+  # # sensitivity summaries
+  # tar_target(sens_animal,
+  #            summarise_variants(results_all_animal, 
+  #                               top_n = settings$sensitivity$top_n)),
+  # tar_target(sens_plant,
+  #            summarise_variants(results_all_plant, 
+  #                               top_n = settings$sensitivity$top_n))
 )
-
 
 # full table for one scenario
 # tar_read(results_wind_animal)

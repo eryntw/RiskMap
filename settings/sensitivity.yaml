@@ -1,0 +1,38 @@
+sensitivity:
+  top_n: 20  # size of the "priority list" used in the summaries
+
+# Each variant overrides parts of the baseline settings. Anything not listed
+# stays as in the baseline.
+
+variants:
+
+#### Baseline ----
+  baseline: {} # required: the reference run
+
+#### Aggregation method ----
+  agg_arithmetic: # arithmetic mean at all levels
+    aggregation: {f_ag: a_amean}
+    
+  agg_geometric: # geometric mean at all levels
+    aggregation: {f_ag: a_gmean}
+    
+  floor_10: # raises the floor; only matters for geometric means
+    normalisation: {range: [10, 100]}
+
+#### NA thresholds ----    
+  dat_thresh_0: # any known child gives a score
+    aggregation: {dat_thresh: 0}
+    
+  dat_thresh_067:
+    aggregation: {dat_thresh: 0.67}
+    
+  dat_thresh_1: # complete cases only
+    aggregation: {dat_thresh: 1}
+
+#### Weights ----    
+  equal_weights: # ignore the scenario weights
+    weights: equal
+
+#### Stressor leave-one-out----
+leave_one_out:
+  parent: exposure

@@ -1,0 +1,43 @@
+Yes. Your input scores are coarse (binary flags and 1 to 3 classes), so noise in individual trait values is not where most of the uncertainty sits. It sits in the structural choices you made: how scores are combined, how unknowns are treated, and how much each stressor counts. I'd test those and judge the results on ranks and top-N membership, because the decision is about prioritising species, not the exact score.
+
+## What I'd test
+
+| Test | What you vary | Why it matters here |
+|---|---|---|
+| Aggregation method | Arithmetic everywhere, your arithmetic/geometric mix, geometric everywhere | A geometric mean punishes low values. With binary and ordinal inputs, a single flag at the floor can pull a group down sharply, so this is probably your largest single effect |
+
+| Normalisation floor and method | Min-max from 1 vs 10 (geometric only), and percentile rank instead of min-max | In a geometric mean the floor is a hidden parameter. Min-max is also driven by extreme species (EOO, body mass), and percentile rank shows whether a few outliers set the scale |
+
+| Unknown data | `dat_thresh` at 0, 0.5, 0.67 and 1 (complete cases); optionally impute group means instead of ignoring NAs | Your NAs are real unknowns. This decides which species get a score at all, and whether data-poor species drift to the top or bottom |
+
+| Stressor weights | Random weights around your baseline (for example each between half and 1.5 times its value), plus equal weights as a reference | Scenario weights are expert judgement, so this shows how much the conclusions depend on them |
+
+| Leave-one-stressor-out | Drop each stressor, and each sub-group such as `recovery` or `specialisation` (`remove_branch()`) | Shows what drives the ranking. It also checks the double counting from reused branches: run it with the copy removed or its weight halved |
+
+| Trait quality | Treat imputed values (imputed dispersal, imputed plant traits) as NA, and flip `Direction` for traits whose ecological direction is debatable | Shows whether the priority list depends on the least certain data |
+
+## What I'd skip
+
+These are fine-tuning, or already shown not to matter:
+
+- Log versus log10 (only a linear rescale, as discussed earlier).
+- Small weight jitter of 5 to 10 percent.
+- Skew and kurtosis thresholds for flagging, winsorisation limits and rounding.
+- Random noise on individual scores. With binary and 1 to 3 inputs, it isn't a realistic error model.
+
+## How to summarise
+
+- For each species, give the median rank and a 5 to 95 percent interval across runs.
+- Report how often each species lands in the top N, where N is the number you'd actually act on (say 20 or 10 percent). Species in the top N in over 90 percent of runs are your robust priority list.
+- Give Spearman correlation with the baseline for each variant.
+- Check whether `pct_known` is related to rank. If data-poor species are systematically ranked high or low, that is a bias worth reporting.
+
+## How to run it
+
+I'd use two tiers:
+
+1. **One-at-a-time variants.** These are cheap and easy to explain. Add a `variants:` block to `scenarios.yaml` (aggregation, floor, `dat_thresh`, extra drops, imputed-as-NA) and extend the `tar_map()` grid. Your results tables already carry the rank columns, so `compare_scenarios()` can compare variants the same way it compares wind, solar and mine.
+
+2. **Monte Carlo for the weights and a few discrete choices**, with a few hundred to a thousand runs. At 184 and 426 species this is cheap. COINr has uncertainty and sensitivity tools for this (`get_sensitivity()`, from memory, which varies assumptions stored in the coin's log and regenerates it, so check the docs for the exact specification). They start from a built coin, so choices made before `new_coin()` (dropped branches, removed species, `collapse_to_any`, imputed-as-NA) must be varied in your own grid instead.
+
+A cheap plausibility check alongside all this: compare the exposure ranks with conservation status (IUCN, EPBC) now that `status` is out of the index, to see whether the two broadly agree where you'd expect them to.

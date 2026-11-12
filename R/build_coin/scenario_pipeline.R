@@ -1,13 +1,18 @@
 ## apply_scenario ##
 # Reads one scenario/group block from settings and builds its inputs
 # (drops branches, sets weights) via scenario_inputs().
-apply_scenario <- function(inputs, settings, scenario, group) {
+apply_scenario <- function(inputs, settings, scenario, group,
+                           extra_drop = NA_character_) {
   s <- settings$scenarios[[scenario]][[group]]
   if (is.null(s)) {
     stop("No settings for scenario '", scenario, "' and group '", group,
          "' in scenarios.yaml")
   }
-  scenario_inputs(inputs, drop = unlist(s$drop), weights = unlist(s$weights))
+  drop    <- unique(c(unlist(s$drop), stats::na.omit(extra_drop)))
+  weights <- if (isTRUE(settings$equal_weights)) NULL else unlist(s$weights)
+  weights <- weights[!names(weights) %in% drop]   # no weights for dropped branches
+  if (!length(weights)) weights <- NULL
+  scenario_inputs(inputs, drop = drop, weights = weights)
 }
 
 ## build_treated_coin ##
@@ -66,4 +71,21 @@ aggregate_scenario <- function(coin_norm, settings, group) {
   ag <- settings$aggregation[[group]]
   COINr::Aggregate(coin_norm, dset = "Normalised",
                    f_ag = unlist(ag$f_ag), dat_thresh = ag$dat_thresh)
+}
+
+## effective_settings ##
+# Baseline settings with one variant's overrides applied. The wrappers below
+# read these instead of the raw YAML. Variants not in the YAML (the generated
+# leave-one-out ones) have no overrides.
+effective_settings <- function(settings, group, variant) {
+  v <- settings$variants[[variant]]
+  s <- settings
+  if (!is.null(v$normalisation)) {
+    s$normalisation <- utils::modifyList(s$normalisation, v$normalisation)
+  }
+  if (!is.null(v$aggregation)) {
+    s$aggregation[[group]] <- utils::modifyList(s$aggregation[[group]], v$aggregation)
+  }
+  s$equal_weights <- identical(v$weights, "equal")
+  s
 }

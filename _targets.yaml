@@ -4,6 +4,9 @@ coin_prep:
 coin_build:
   script: ../RiskMap/020_coin_build.R
   store: ../../out/RiskMap/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/coin_build
+mapsdm:
+  script: ../RiskMap/030_mapsdm.R
+  store: ../../out/RiskMap/aus_imcra_prov_dissolve______0__P50Y__sa_br_dissolve/30__30__P1Y__species--subspecies/mapsdm
 RecExtract:
   RecExtr:
     script: ../RecExtract/010_RecExtr.R
